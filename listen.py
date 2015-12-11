@@ -7,6 +7,8 @@ import speech_recognition as sr
 def do_recognize(recognizer, audio, key, use_wit):
     phrase = ""
     engine = ""
+    print('use wit: ' + use_wit)
+    print('using key: ' + key)
     if use_wit:
         # recognize speech using Wit.ai
         WIT_AI_KEY = "AVPNCOC732URGDUWILQ333FQLWJZBZON" # Wit.ai keys are 32-character uppercase alphanumeric strings
@@ -19,8 +21,10 @@ def do_recognize(recognizer, audio, key, use_wit):
         # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
         # instead of `r.recognize_google(audio)`
         if key is None:
+            print('using built in api key')
             recognizer.recognize_google(audio)
         else:
+            print('using custom key')
             recognizer.recognize_google(audio, key)
 
         phrase = recognizer.recognize_google(audio)
@@ -37,16 +41,20 @@ def read_key():
         if key is not None:
             key = key.strip('\n')
 
+    print('got current key: ' + key)
     return key
 
 def write_key(key):
+    print('writing key: ' + key)
     with open('./currkey', 'w') as keyfile:
         keyfile.write(key)
 
 def keychange(last_key):
     keys = None
-    with open('./keys') as file:
+    with open('./keys', 'r') as file:
         keys = [line.strip('\n') for line in file]
+
+    print('found ' + len(keys) + ' keys in keyfile')
 
     key_index = None
     if last_key in keys:
