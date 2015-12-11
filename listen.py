@@ -92,10 +92,14 @@ def callback(recognizer, audio):
 
 
 r = sr.Recognizer()
+r.pause_threshold = 1.0 # seconds of pause to end a phrase.
+r.phrase_threshold = 0.7 # seconds of speech time before phrase can be considered started
+
 m = sr.Microphone()
 with m as source:
     r.adjust_for_ambient_noise(source) # we only need to calibrate once, before we start listening
 
+print('using energy threshold: ' + r.energy_threshold)
 # start listening in the background (note that we don't have to do this inside a `with` statement)
 stop_listening = r.listen_in_background(m, callback)
 # `stop_listening` is now a function that, when called, stops background listening
@@ -105,7 +109,7 @@ import time
 running = True
 getinput = raw_input or input
 while running:
-    cmd = getinput().lower()
+    cmd = getinput('> ').lower()
     if (cmd == 'quit' or cmd == 'exit'):
         print('exiting')
         stop_listening()
