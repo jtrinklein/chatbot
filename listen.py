@@ -78,7 +78,7 @@ def callback(recognizer, audio):
         try:
             retries -= 1
             phrase = do_recognize(recognizer, audio, key, use_wit)
-            with open('~/chatbotio', 'w') as botcomm:
+            with open('/home/ubuntu/chatbotio', 'w') as botcomm:
                 botcomm.write(phrase)
             return
 
