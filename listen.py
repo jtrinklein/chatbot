@@ -61,7 +61,7 @@ def callback(recognizer, audio):
     retries = 3
     while retries > 0:
         try:
-            retries--
+            retries -= 1
             return do_recognize(key, use_wit)
 
         except sr.UnknownValueError:
