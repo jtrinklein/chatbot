@@ -20,12 +20,12 @@ def do_recognize(recognizer, audio, key, use_wit):
         # for testing purposes, we're just using the default API key
         # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
         # instead of `r.recognize_google(audio)`
-        if key is None:
-            print('using built in api key')
-            recognizer.recognize_google(audio)
-        else:
+        if key:
             print('using custom key')
             recognizer.recognize_google(audio, key)
+        else:
+            print('using built in api key')
+            recognizer.recognize_google(audio)
 
         phrase = recognizer.recognize_google(audio)
         engine = "Google Speech Recognition"
@@ -38,7 +38,7 @@ def read_key():
     with open('./currkey', 'r') as keyfile:
 
         key = keyfile.readline()
-        if key is not None:
+        if key:
             key = key.strip('\n')
 
     print('got current key: ' + key)
@@ -60,7 +60,7 @@ def keychange(last_key):
     if last_key in keys:
         key_index = keys.index(last_key)
     next_key = 'wit'
-    if key_index is not None and key_index < len(keys):
+    if key_index and key_index < len(keys):
         next_key = keys[key_index+1]
 
     write_key(next_key)
