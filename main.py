@@ -81,5 +81,5 @@ while True:
             exit()
         else:
             chatbot.get_response(message)
-    except EOFError e:
+    except EOFError as e:
         print("got eof")
