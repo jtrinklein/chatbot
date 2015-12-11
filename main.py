@@ -73,9 +73,16 @@ chatbot.train([
     "Where did you hear that name?"
 ])
 
+print('I am Alive!')
+
 while True:
     try:
-        message = raw_input("> ")
+        message = ''
+        with open('../../chatbotio', 'r') as input:
+            message = input.read();
+            if message:
+                print('> ' + message)
+
         if "exit" in message:
             print("Well that's rude.  Goodbye")
             exit()
