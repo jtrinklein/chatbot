@@ -32,7 +32,10 @@ def do_recognize(recognizer, audio, key, use_wit):
 def read_key():
     key = None
     with open('./currkey', 'r') as keyfile:
-        key = keyfile.readline().strip('\n')
+
+        key = keyfile.readline()
+        if key is not None:
+            key = key.strip('\n')
 
     return key
 
@@ -45,8 +48,12 @@ def keychange(last_key):
     with open('./keys') as file:
         keys = [line.strip('\n') for line in file]
 
-    key_index = keys.index(last_key) if last_key in keys else None
-    next_key = keys[key_index+1] if key_index is not None and key_index < len(keys) else 'wit'
+    key_index = None
+    if last_key in keys:
+        key_index = keys.index(last_key)
+    next_key = 'wit'
+    if key_index is not None and key_index < len(keys):
+        next_key = keys[key_index+1]
 
     write_key(next_key)
 
