@@ -4,7 +4,7 @@
 
 import speech_recognition as sr
 
-def do_recognize(recognizer, key, use_wit):
+def do_recognize(recognizer, audio, key, use_wit):
     phrase = ""
     engine = ""
     if use_wit:
@@ -62,7 +62,7 @@ def callback(recognizer, audio):
     while retries > 0:
         try:
             retries -= 1
-            return do_recognize(recognizer, key, use_wit)
+            return do_recognize(recognizer, audio, key, use_wit)
 
         except sr.UnknownValueError:
             print("Could not understand audio")
