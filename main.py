@@ -81,7 +81,7 @@ while True:
     try:
         message = ''
         with open('../../chatbotio', 'r') as input:
-            message = input.read();
+            message = input.read()
             if message:
                 print('> ' + message)
 
@@ -89,6 +89,8 @@ while True:
             print("Well that's rude.  Goodbye")
             exit()
         else:
-            chatbot.get_response(message)
+            response = chatbot.get_response(message)
+            with open('../../sayio', 'w') as output:
+                output.write(response)
     except EOFError as e:
         print("got eof")
