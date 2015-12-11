@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from chatterbot import ChatBot
 
 chatbot = ChatBot("HAL 9000")
