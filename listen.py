@@ -7,7 +7,7 @@ import speech_recognition as sr
 def do_recognize(recognizer, audio, key, use_wit):
     phrase = ""
     engine = ""
-    print('use wit: ' + use_wit)
+    print('use wit: ' + str(use_wit))
     print('using key: ' + key)
     if use_wit:
         # recognize speech using Wit.ai
