@@ -55,10 +55,9 @@ def callback(recognizer, audio):
 
     use_wit = key == 'wit'
 
-    retries = 3
     try:
-        retries -= 1
         phrase = do_recognize(recognizer, audio, key, use_wit)
+        keychange()
 
         with open('/home/ubuntu/chatbotio', 'w') as botcomm:
             botcomm.write(phrase)
