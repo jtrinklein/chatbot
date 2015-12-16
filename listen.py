@@ -52,24 +52,21 @@ def keychange():
 # this is called from the background thread
 def callback(recognizer, audio):
     key = read_key()
-
+    keychange()
     use_wit = key == 'wit'
 
     try:
         phrase = do_recognize(recognizer, audio, key, use_wit)
-        keychange()
-
         with open('/home/ubuntu/chatbotio', 'w') as botcomm:
             botcomm.write(phrase)
 
     except sr.UnknownValueError:
         print("Could not understand audio")
-        return ""
+
     except sr.RequestError as e:
         print("Could not request results from service; {0}".format(e))
         if not use_wit:
             print("going to try changing keys")
-            key = keychange(key)
             if key == 'wit':
                 print('falling back to wit')
 
