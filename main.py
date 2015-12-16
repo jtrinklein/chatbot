@@ -6,6 +6,10 @@ chatbot = ChatBot("HAL 9000")
 chatbot.train("chatterbot.corpus.english")
 
 chatbot.train([
+    'hello',
+    "You've got mail!"
+])
+chatbot.train([
     "Open the pod bay doors",
     "I'm sorry Dave, I can't do that."
 ])

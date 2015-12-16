@@ -3,6 +3,9 @@
 # NOTE: this example requires PyAudio because it uses the Microphone class
 
 import speech_recognition as sr
+api_keys = None
+with open('./keys', 'r') as file:
+    api_keys = [line.strip('\n') for line in file]
 
 def do_recognize(recognizer, audio, key, use_wit):
     phrase = ""
@@ -34,38 +37,17 @@ def do_recognize(recognizer, audio, key, use_wit):
     return phrase
 
 def read_key():
-    key = None
-    with open('./currkey', 'r') as keyfile:
-
-        key = keyfile.readline()
-        if key:
-            key = key.strip('\n')
-
-    print('got current key: ' + key)
-    return key
+    return api_keys[1]
 
 def write_key(key):
     print('writing key: ' + key)
     with open('./currkey', 'w') as keyfile:
         keyfile.write(key)
 
-def keychange(last_key):
-    keys = None
-    with open('./keys', 'r') as file:
-        keys = [line.strip('\n') for line in file]
-
-    print('found ' + len(keys) + ' keys in keyfile')
-
-    key_index = None
-    if last_key in keys:
-        key_index = keys.index(last_key)
-    next_key = 'wit'
-    if key_index and key_index < len(keys):
-        next_key = keys[key_index+1]
-
-    write_key(next_key)
-
-    return next_key
+def keychange():
+    key = api_keys.pop(1)
+    api_keys.append(key)
+    return api_keys[1]
 
 # this is called from the background thread
 def callback(recognizer, audio):
@@ -74,29 +56,28 @@ def callback(recognizer, audio):
     use_wit = key == 'wit'
 
     retries = 3
-    while retries > 0:
-        try:
-            retries -= 1
-            phrase = do_recognize(recognizer, audio, key, use_wit)
-            with open('/home/ubuntu/chatbotio', 'w') as botcomm:
-                botcomm.write(phrase)
-            return
+    try:
+        retries -= 1
+        phrase = do_recognize(recognizer, audio, key, use_wit)
 
-        except sr.UnknownValueError:
-            print("Could not understand audio")
-            return ""
-        except sr.RequestError as e:
-            print("Could not request results from service; {0}".format(e))
-            if not use_wit:
-                print("going to try changing keys")
-                key = keychange(key)
-                if key == 'wit':
-                    print('falling back to wit')
+        with open('/home/ubuntu/chatbotio', 'w') as botcomm:
+            botcomm.write(phrase)
+
+    except sr.UnknownValueError:
+        print("Could not understand audio")
+        return ""
+    except sr.RequestError as e:
+        print("Could not request results from service; {0}".format(e))
+        if not use_wit:
+            print("going to try changing keys")
+            key = keychange(key)
+            if key == 'wit':
+                print('falling back to wit')
 
 
 r = sr.Recognizer()
 #r.pause_threshold = 1.0 # seconds of pause to end a phrase.
-r.phrase_threshold = 0.4 # seconds of speech time before phrase can be considered started
+#r.phrase_threshold = 0.4 # seconds of speech time before phrase can be considered started
 
 m = sr.Microphone()
 with m as source:
