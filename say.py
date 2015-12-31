@@ -10,4 +10,4 @@ while True:
             msg = '"' + message + '"'
             print('> ' + msg)
 
-            call(['espeak', '-ven+m2','-k5', '-s150', msg])
+            call(['espeak', '-ven+m2', '-a15', '-k5', '-s150', msg])
